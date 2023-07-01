@@ -16,7 +16,7 @@ class App extends GetView<AppController> {
             icon: const Icon(Icons.image),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: controller.upload,
             icon: const Icon(Icons.send),
           ),
         ],
@@ -25,7 +25,7 @@ class App extends GetView<AppController> {
         () => Column(
           children: [
             _pickImage(),
-            // _showImages(),
+            _showImages(),
           ],
         ),
       ),
@@ -37,16 +37,36 @@ class App extends GetView<AppController> {
       width: Get.size.width,
       height: Get.size.width,
       color: Colors.grey,
-      child: (controller.pcikedImage == null)
+      child: (controller.pickedImage == null)
           ? const Icon(
               Icons.image_not_supported,
               size: 100,
               color: Colors.white,
             )
           : Image.file(
-              controller.pickedImage,
+              controller.pickedImage!,
               fit: BoxFit.cover,
             ),
+    );
+  }
+
+  Widget _showImages() {
+    return Expanded(
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          mainAxisSpacing: 4,
+          crossAxisSpacing: 4,
+        ),
+        itemCount: controller.images.length,
+        itemBuilder: (context, index) {
+          final url = controller.images[index];
+          return Image.network(
+            url,
+            fit: BoxFit.cover,
+          );
+        },
+      ),
     );
   }
 }
